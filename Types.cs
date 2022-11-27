@@ -17,11 +17,15 @@ namespace scammus
     {
         public string yesText;
         public string noText;
+        public bool isOpen;
         ConcurrentDictionary<string, uint> yesWagers = new ConcurrentDictionary<string, uint>();
         ConcurrentDictionary<string, uint> noWagers = new ConcurrentDictionary<string, uint>();
 
         public string ModifyWager(bool yes, string name, int amount, ref BankAccount account)
         {
+            if(!isOpen)
+                return "too late BROO";
+
             if (account.balance < amount)
                 return "youre too poor for that shit";
 

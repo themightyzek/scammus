@@ -23,6 +23,7 @@ namespace scammus
         static StreamWriter chatOut;
         static TcpClient tcpClient = new TcpClient();
         static Scammus scammus = new Scammus();
+        static TwitchSpawner ts = new TwitchSpawner();
 
         static async Task Main(string[] args)
         {
@@ -87,30 +88,48 @@ namespace scammus
                     case "bet":
                         SendMessageAsync(scammus.Bet(args[1], msg.client, args[2]));
                         break;
+
                     case "prediction":
-                        if(msg.client == "themightyzek") 
+                        if(msg.client == "themightyzek" || msg.client == "CuteCrait" || msg.client == "Timebombe27") 
                             SendMessageAsync(scammus.Prediction(args[1], args[2], args[3]));
                         break;
+
                     case "result":
-                        if(msg.client == "themightyzek")
+                        if(msg.client == "themightyzek" || msg.client == "CuteCrait" || msg.client == "Timebombe27")
                             SendMessageAsync(scammus.Result(args[1]));
                         break;
+
                     case "balance":
                         SendMessageAsync(scammus.Balance(msg.client));
                         break;
+
+                    case "lock":
+                        SendMessageAsync(scammus.LockPrediction());
+                        break;
+
+                    case "give":
+                        SendMessageAsync(scammus.Give(msg.client, args[1], args[2]));
+                        break;
+
+                    case "spawn":
+                        SendMessageAsync(ts.Spawn(msg.body));
+                        break;
+
                     default:
                         break;
                 }
             }
             catch (System.Exception)
             {
-
                 throw;
             }
         }
 
         static async void SendMessageAsync(string message)
         {
+            if(message == null || message == "")
+                return;
+            
             await chatOut.WriteLineAsync($"PRIVMSG #{channel} :{message}");
             Console.WriteLine($">>> {message}");
         }
