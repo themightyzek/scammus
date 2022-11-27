@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.IO;
+using System.Linq;
 
 namespace scammus
 {
@@ -16,13 +17,15 @@ namespace scammus
         const char PREFIX = '!';
         static string ip = "irc.chat.twitch.tv";
         static int port = 6667;
-        static string password = Environment.GetEnvironmentVariable("SCAMMUS_TWITCH_OAUTH");
+        static string password = "oauth:1h2w35an2u28gjjwzt7vxw3t0khj2y"; // DO NOT COMMIT EVER
         static string botUsername = "scammus";
         static string channel = "cutecrait";
+        static string[] mods = { "cutecrait", "themightyzek", "kupfrigestischlein", "mrschokokuchenmonster" };
         static StreamReader chatIn;
         static StreamWriter chatOut;
         static TcpClient tcpClient = new TcpClient();
         static Scammus scammus = new Scammus();
+        static Pushups pushups = new Pushups();
 
         static async Task Main(string[] args)
         {
@@ -45,8 +48,15 @@ namespace scammus
 
             while (true)
             {
-                string line = await chatIn.ReadLineAsync();
-                HandleMessageAsync(line);
+                try
+                {
+                    string line = await chatIn.ReadLineAsync();
+                    HandleMessageAsync(line);
+                }
+                catch (System.Exception)
+                {
+                    
+                }
             }
         }
 
@@ -97,6 +107,15 @@ namespace scammus
                         break;
                     case "balance":
                         SendMessageAsync(scammus.Balance(msg.client));
+                        break;
+                    case "pushups":
+                        if(mods.Contains(msg.client))
+                        {
+                            if(args[1] == "set")
+                                SendMessageAsync(await pushups.SetPushups(args[2], Int32.Parse(args[3])));
+                            else if(args[1] == "draw")
+                                SendMessageAsync(pushups.Roll());
+                        }
                         break;
                     default:
                         break;
