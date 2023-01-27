@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace scammus
 {
-    struct Message
+    public struct Message
     {
         public string client;
         public string body;
@@ -83,6 +83,17 @@ namespace scammus
                 body = messageParts[3].Remove(0, 1),
                 client = messageParts[0].Substring(1, messageParts[0].IndexOf('!') - 1)
             };
+
+            if (msg.client.ToLowerInvariant() == "streamlabs")
+            try
+            {
+                SendMessageAsync(Streamlabs.HandleMessage(msg));
+                
+            }
+            catch (System.Exception)
+            {
+                SendMessageAsync("ALARM! ALARRRRRM! (ich komm mit der message nicht klar)");
+            }
 
             if (!msg.body.StartsWith(PREFIX))
                 return;
