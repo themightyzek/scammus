@@ -45,7 +45,8 @@ namespace scammus
             await chatOut.WriteLineAsync($"NICK {botUsername}");
             await chatOut.WriteLineAsync($"JOIN #{channel}");
 
-            await chatOut.WriteLineAsync($"PRIVMSG #{channel} :TEST 123 LUUUUL");
+            await chatOut.WriteLineAsync($"PRIVMSG #{channel} :Ich bin live und in Farbe sussyPls");
+            await chatOut.WriteLineAsync($"PRIVMSG #{channel} : {Streamlabs.Initialize()}");
 
             while (true)
             {
@@ -84,16 +85,18 @@ namespace scammus
                 client = messageParts[0].Substring(1, messageParts[0].IndexOf('!') - 1)
             };
 
+            // SUBATHON PART
             if (msg.client.ToLowerInvariant() == "streamlabs")
             try
             {
-                SendMessageAsync(Streamlabs.HandleMessage(msg));
-                
+                foreach (var answer in Streamlabs.HandleMessage(msg))
+                    SendMessageAsync(answer);
             }
             catch (System.Exception)
             {
                 SendMessageAsync("ALARM! ALARRRRRM! (ich komm mit der message nicht klar)");
             }
+            // END SUBATHON
 
             if (!msg.body.StartsWith(PREFIX))
                 return;
@@ -144,6 +147,9 @@ namespace scammus
                             else if(args[1] == "draw")
                                 SendMessageAsync(pushups.Roll());
                         }
+                        break;
+                    case "time":
+                        SendMessageAsync(Streamlabs.SendTime());
                         break;
                     default:
                         break;
