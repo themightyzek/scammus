@@ -17,7 +17,7 @@ namespace scammus
         const char PREFIX = '!';
         static string ip = "irc.chat.twitch.tv";
         static int port = 6667;
-        static string password = "oauth:1h2w35an2u28gjjwzt7vxw3t0khj2y"; // DO NOT COMMIT EVER
+        static string password = "oauth:INSERTTOKENHERE"; // DO NOT COMMIT EVER
         static string botUsername = "scammus";
         static string channel = "cutecrait";
         static string[] mods = { "cutecrait", "themightyzek", "kupfrigestischlein", "mrschokokuchenmonster" };
